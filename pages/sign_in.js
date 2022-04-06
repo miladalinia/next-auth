@@ -4,6 +4,7 @@ import * as Yup from 'yup'
 import {errorHelper} from 'utils/tools'
 import {Button, TextField} from "@material-ui/core";
 import axios from "axios";
+import {signIn} from "next-auth/react";
 
 const SignIn = () => {
     const [formType, setFormType] = useState(false);
@@ -21,12 +22,10 @@ const SignIn = () => {
         onSubmit: (values) => {
             // console.log(values)
             submitForm(values)
-
         }
-
     })
 
-    const submitForm = (values) => {
+    const submitForm = async (values) => {
         if (formType) {
             //register user
             axios.post('/api/auth', values)
@@ -35,10 +34,17 @@ const SignIn = () => {
                 }).catch(error => {
                 console.log(error.response.data)
             })
+        } else {
+            const result = await signIn('credentials', {
+                redirect: false,
+                email: values.email,
+                password: values.password
+            });
+            console.log(result);
         }
     }
 
-    const handleFormType = () => {
+    const handleFormType = async () => {
         setFormType(!formType);
     }
 
@@ -86,7 +92,6 @@ const SignIn = () => {
                         <Button
                             variant="contained"
                             color="secondary"
-                            type="submit"
                             size="small"
                             onClick={handleFormType}
                         >
