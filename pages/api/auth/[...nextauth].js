@@ -5,9 +5,9 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 
 export default NextAuth({
-    // session: {
-    //     jwt: true
-    // },
+    session: {
+        jwt: true
+    },
     providers: [
         CredentialsProvider({
             name: 'Credentials',
